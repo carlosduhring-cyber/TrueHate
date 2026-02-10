@@ -1,0 +1,49 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<section class="form-section">
+    <h2>Comentários</h2>
+
+    {% if avaliacao %}
+    <div class="avaliacao-selecionada">
+        <h3>Você está comentando na avaliação de: 
+            <strong>
+                {% if avaliacao.nomePessoaPublicou == 'Anônimo' %}
+                    Anônimo
+                {% else %}
+                    {{ avaliacao.nomePessoaPublicou }}
+                {% endif %}
+            </strong>
+        </h3>
+        <div class="avaliacao-preview">
+            <p><strong>Empresa:</strong> {{ avaliacao.nome_empresa }}</p>
+            <p><strong>Nota:</strong> {{ avaliacao.nota }}/5</p>
+            <p><strong>Avaliação:</strong> {{ avaliacao.texto }}</p>
+            <small>Publicado em: {{ avaliacao.dataPublicada }}</small>
+        </div>
+    </div>
+    {% endif %}
+    
+    <form method="POST" class="form-card">
+        <div class="anonimo-option">
+            <input type="checkbox" id="anonimo" name="anonimo">
+            <label for="anonimo">Comentar como anônimo</label>
+            <small class="help-text">Sua identidade será mantida em sigilo</small>
+        </div>
+        
+        <label for="texto">Comentário:</label>
+        <input type="text" id="texto" name="texto" required placeholder="Digite seu comentário...">
+             
+        <button class="btnsalvar" type="submit">Publicar Comentário</button>
+        
+        <div class="info-anonimo">
+            <p><small>💡 Dica: Comentários anônimos não exigem login.</small></p>
+            {% if not session.get('logado') %}
+            <p><small>Para comentários com seu nome, <a href="{{ url_for('login') }}">faça login</a> primeiro.</small></p>
+            {% endif %}
+        </div>
+    </form>
+</section>
+{% endblock %}
+[file content end]

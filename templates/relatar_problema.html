@@ -1,0 +1,31 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+
+
+<div class="relatar-wrapper">
+    <h2 class="relatar-titulo">Relatar Problema</h2>
+
+    <div class="relatar-box">
+        <form method="POST" class="relatar-form">
+
+            <label class="relatar-label">Nome:</label>
+            <input type="text" name="nome" class="relatar-input" required>
+
+            <label class="relatar-label">Email (Gmail):</label>
+            <input type="email" name="email" class="relatar-input" placeholder="exemplo@gmail.com" required>
+
+            <label class="relatar-label">Telefone:</label>
+            <input type="text" name="telefone" class="relatar-input" required>
+
+            <label class="relatar-label">Descreva o problema:</label>
+            <textarea name="problema" class="relatar-textarea" required></textarea>
+
+            <button type="submit" class="relatar-btn">Enviar</button>
+        </form>
+    </div>
+</div>
+
+{%endblock%}

@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="lista-avaliacoes-container">
+    <h2>Avaliações Publicadas</h2>
+    
+    <form action="/pesquisar" method="POST" class="search-box">
+        <input type="text" name="pesquisa" placeholder="Pesquise aqui..." required>
+        <button type="submit">Buscar</button>
+    </form>
+    
+
+    {% if avaliacoes %}
+        <div class="avaliacoes-lista">
+            {% for avaliacao in avaliacoes %}
+            <div class="avaliacao-item">
+                <div class="avaliacao-header">
+                    <div class="avaliacao-user-info">
+                        <!-- Identificação do tipo de usuário -->
+                        {% if avaliacao.inadmin == 2 %}
+                            <span class="user-badge empresa-badge">Empresa</span>
+                        {% elif avaliacao.inadmin == 1 %}
+                            <span class="user-badge admin-badge"> Administrador</span>
+                        {% else %}
+                            <span class="user-badge usuario-badge"> Usuário</span>
+                        {% endif %}
+                        
+                        <!-- Nome do autor -->
+                        <h3>
+                            <strong>Autor:</strong> 
+                            {% if avaliacao.nomePessoaPublicou == 'Anônimo' %}
+                                👤 Anônimo
+                            {% else %}
+                                {{ avaliacao.nomePessoaPublicou }}
+                            {% endif %}
+                        </h3>
+                        
+                        <!-- Empresa sendo avaliada -->
+                        <span class="empresa-avaliada"> <strong>Empresa avaliada:</strong> {{ avaliacao.nome_empresa }}</span>
+                    </div>
+                    
+                    <!-- Nota em estrelas -->
+                    <span class="nota-estrelas">
+                        <strong>Nota:</strong>
+                        {% if avaliacao.nota <= 5 %}
+                            {% for i in range(1, 6) %}
+                                {% if i <= avaliacao.nota %}
+                                    ★
+                                {% else %}
+                                    ☆
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <!-- Sistema antigo se necessário -->
+                        {% endif %}
+                    </span>
+                    
+                    <!-- Botões de ação -->
+                    <div class="avaliacao-actions">
+                        {% if session.get('inadmin') == 1 or (avaliacao.usuario_id is not none and session.get('id_usuario') == avaliacao.usuario_id) %}
+                            <a href="{{ url_for('editar_avaliacao', id=avaliacao.id) }}" class="btn-editar-avaliacao"> Editar</a>
+                        {% endif %}
+                        {% if session.get('inadmin') == 1 or (avaliacao.usuario_id is not none and session.get('id_usuario') == avaliacao.usuario_id) %}
+                            <a href="{{ url_for('excluir_avaliacao', id=avaliacao.id) }}" 
+                               class="btn-excluir-avaliacao" 
+                               onclick="return confirm('Tem certeza que deseja excluir esta avaliação?');">🗑️ Excluir</a>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Texto da avaliação -->
+                <div class="avaliacao-texto">
+                    <p><strong>Avaliação:</strong> {{ avaliacao.texto }}</p>
+                </div>
+                
+                <!-- Informações da avaliação -->
+                <div class="avaliacao-info">
+                    <span class="data"><strong>Publicado em:</strong> {{ avaliacao.dataPublicada }}</span>
+                    <span class="comentarios"><strong>Comentários:</strong> {{ avaliacao.total_comentarios }}</span>
+                </div>
+                
+                <!-- Botão para comentar -->
+                {% if session.get('logado') %}
+                <a href="{{ url_for('comentar', avaliacao_id=avaliacao.id) }}" class="btn-escolher">
+                     Comentar nesta avaliação
+                </a>
+                {% else %}
+                <a href="{{ url_for('comentar', avaliacao_id=avaliacao.id) }}" class="btn-escolher">
+                     Comentar (pode ser anônimo)
+                </a>
+                {% endif %}
+
+                <!-- Área de comentários -->
+                <div class="comentarios-area">
+                    <h4> Comentários ({{ avaliacao.total_comentarios }}):</h4>
+                    
+                    {% if avaliacao.comentarios %}
+                        <div class="comentarios-lista">
+                            {% for comentario in avaliacao.comentarios %}
+                            <div class="comentario-item {% if comentario.inadmin == 2 %}comentario-empresa{% endif %}">
+                                <div class="comentario-header">
+                                    <div class="comentario-user-info">
+                                        <!-- Tipo do comentarista -->
+                                        {% if comentario.inadmin == 2 %}
+                                            <span class="user-badge empresa-badge">Empresa</span>
+                                        {% elif comentario.inadmin == 1 %}
+                                            <span class="user-badge admin-badge"> Admin</span>
+                                        {% else %}
+                                            <span class="user-badge usuario-badge">Usuário</span>
+                                        {% endif %}
+                                        
+                                        <!-- Nome do comentarista -->
+                                        <strong>
+                                            <strong>Comentarista:</strong>
+                                            {% if comentario.nome_usuario_comentou == 'Anônimo' %}
+                                                👤 Anônimo
+                                            {% else %}
+                                                {{ comentario.nome_usuario_comentou }}
+                                            {% endif %}
+                                        </strong>
+                                    </div>
+                                    <span class="data-comentario"><strong>Data:</strong> {{ comentario.data_comentario }}</span>
+                                    
+                                    <!-- Ações do comentário -->
+                                    <div class="comentario-actions">
+                                        {% if session.get('logado') %}
+                                        <a href="{{ url_for('responder_comentario', comentario_id=comentario.id) }}" 
+                                           class="btn-responder">↪ Responder</a>
+                                        {% else %}
+                                        <a href="{{ url_for('responder_comentario', comentario_id=comentario.id) }}" 
+                                           class="btn-responder">↪ Responder (anônimo)</a>
+                                        {% endif %}
+                                        {% if session.get('inadmin') == 1 or session.get('id_usuario') == comentario.usuario_id %}
+                                            <a href="{{ url_for('editar_comentario', id=comentario.id) }}" 
+                                               class="btn-editar-comentario"> Editar</a>
+                                            <a href="{{ url_for('excluir_comentario', id=comentario.id) }}" 
+                                               class="btn-excluir-comentario" 
+                                               onclick="return confirm('Tem certeza que deseja excluir este comentário?');">🗑️ Excluir</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <!-- Texto do comentário -->
+                                <p class="comentario-texto"><strong>Comentário:</strong> {{ comentario.texto }}</p>
+                                
+                                <!-- Respostas aos comentários -->
+                                {% if comentario.respostas %}
+                                <div class="respostas-lista">
+                                    {% for resposta in comentario.respostas %}
+                                    <div class="resposta-item {% if resposta.inadmin == 2 %}resposta-empresa{% endif %}">
+                                        <div class="resposta-header">
+                                            <div class="resposta-user-info">
+                                                <!-- Tipo do respondedor -->
+                                                {% if resposta.inadmin == 2 %}
+                                                    <span class="user-badge empresa-badge"> Empresa</span>
+                                                {% elif resposta.inadmin == 1 %}
+                                                    <span class="user-badge admin-badge">Admin</span>
+                                                {% else %}
+                                                    <span class="user-badge usuario-badge"> Usuário</span>
+                                                {% endif %}
+                                                
+                                                <!-- Nome do respondedor -->
+                                                <strong>↳ <strong>Resposta de:</strong>
+                                                    {% if resposta.nome_usuario_comentou == 'Anônimo' %}
+                                                        👤 Anônimo
+                                                    {% else %}
+                                                        {{ resposta.nome_usuario_comentou }}
+                                                    {% endif %}
+                                                </strong>
+                                            </div>
+                                            <span class="data-resposta"><strong>Data:</strong> {{ resposta.data_comentario }}</span>
+                                            
+                                            <!-- Ações da resposta -->
+                                            {% if session.get('inadmin') == 1 or session.get('id_usuario') == resposta.usuario_id %}
+                                            <div class="resposta-actions">
+                                                <a href="{{ url_for('editar_comentario', id=resposta.id) }}" 
+                                                   class="btn-editar-resposta"> Editar</a>
+                                                <a href="{{ url_for('excluir_comentario', id=resposta.id) }}" 
+                                                   class="btn-excluir-resposta" 
+                                                   onclick="return confirm('Tem certeza que deseja excluir esta resposta?');"> Excluir</a>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <!-- Texto da resposta -->
+                                        <p class="resposta-texto"><strong>Resposta:</strong> {{ resposta.texto }}</p>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="sem-avaliacoes">
+            <p>Nenhuma avaliação publicada ainda.</p>
+            <a href="{{ url_for('nova_avaliacao') }}" class="btn-nova"> Fazer primeira avaliação</a>
+        </div>
+    {% endif %}
+</section>
+
+{% endblock %}

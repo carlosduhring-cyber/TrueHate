@@ -1,0 +1,29 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<section class="form-section">
+    {% if item.inadmin == 2 %}
+        <h2>Editar Empresa</h2>
+    {% else %}
+        <h2>Editar Usuário</h2>
+    {% endif %}
+
+    <form method="POST" class="form-card">
+        <label>Nome:</label>
+        <input type="text" name="nome" value="{{ item.nome }}" required>
+
+        <label>E-mail:</label>
+        <input type="email" name="email" value="{{ item.email }}" required>
+
+        <label>Senha (deixe em branco para manter a atual):</label>
+        <input type="password" name="senha" placeholder="Nova senha...">
+
+        <button class="btnsalvar" type="submit">Salvar</button>
+    </form>
+</section>
+
+<style>
+</style>
+{% endblock %}
+[file content end]
