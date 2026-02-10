@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="form-section">
+    <h2>Painel Administrativo</h2>
+
+    <div class="admin-actions">
+        <!-- Formulário para tornar usuário admin -->
+        <div class="admin-section">
+            <h3>Tornar Usuário Administrador</h3>
+            <form method="POST" action="{{ url_for('administrador') }}" class="form-card">  <!-- Corrigido -->
+                <label for="usuario">Usuário:</label>
+                <input type="text" id="usuario" name="usuario" placeholder="Nome do usuario..." required>
+                
+                <label for="inadmin">Tornar Administrador:</label>
+                <select id="inadmin" name="inadmin" class="form-control" required>
+                    <option value="1">Sim - Tornar Admin</option>
+                    <option value="0">Não - Remover Admin</option>
+                </select>
+                
+                <button class="btnsalvar" type="submit">Atualizar Permissões</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

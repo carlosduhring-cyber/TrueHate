@@ -1,0 +1,32 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="avaliacoes-section">
+
+    <div class="quadrado">
+        
+                <h2>Login do Sistema</h2>
+
+                <form method="POST" action="/login">
+                    <label for="usuario">Usuário:</label>
+                    <input type="text" name="usuario" id="usuario" required>
+
+                    <label for="senha">Senha:</label>
+                    <input type="password" name="senha" id="senha" required>
+
+                    <button type="submit">Entrar</button>
+                    <a href="{{ url_for('usuario') }}" class="btn-voltar-login">Não possui uma conta? Faça cadastro.</a> 
+                </form>
+
+    </div>
+    <div class="quadrado2">
+        <h1>Bem-vindo à TrueHate</h1>
+        <p>A plataforma moderna para compartilhar experiências reais sobre empresas e serviços.</p>
+        <p>Compartilhe suas experiências, ajude outros usuários e descubra informações valiosas sobre empresas.</p>
+    </div>
+</section>
+
+{% endblock %}
+[file content end]

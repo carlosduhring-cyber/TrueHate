@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="historico-section">
+    <h2>📊 Histórico Completo do Sistema</h2>
+    
+    <div class="admin-info">
+        <p><strong>👑 Modo Administrador:</strong> Visualizando todas as ações do sistema</p>
+    </div>
+
+    {% if historico %}
+        <div class="historico-lista">
+            {% for item in historico %}
+            <div class="historico-item">
+                <div class="historico-header">
+                    <span class="historico-data">📅 {{ item.data_acao.strftime('%d/%m/%Y %H:%M') }}</span>
+                    <span class="historico-tipo {{ item.tipo_acao|lower }}">{{ item.tipo_acao }}</span>
+                </div>
+                <div class="historico-detalhes">
+                    <p>{{ item.detalhes }}</p>
+                </div>
+                <div class="historico-usuario">
+                    <small>👤 {{ item.nome_completo or item.nome_usuario }} 
+                           {% if item.usuario_id %}(ID: {{ item.usuario_id }}){% endif %}</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="sem-historico">
+            <p>📭 Nenhuma ação registrada no histórico.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

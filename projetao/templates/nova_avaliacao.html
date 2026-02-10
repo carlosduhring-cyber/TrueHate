@@ -1,0 +1,53 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<section class="form-section">
+    <h2>Fazer Avaliação</h2>
+
+    <form method="POST" class="form-card">
+
+    
+        <div class="anonimo-option">
+            <input type="checkbox" id="anonimo" name="anonimo">
+            <label for="anonimo">Publicar como anônimo</label>
+            <small class="help-text">Sua identidade será mantida em sigilo</small>
+        </div>
+        
+        <label for="nome_empresa">Nome da Empresa:</label>
+        <input type="text" id="nome_empresa" name="nome_empresa" 
+               placeholder="Digite o nome da empresa" required>
+               
+        <label for="texto">Avaliação:</label>
+        <input type="text" id="texto" name="texto" required placeholder="Descreva sua experiência...">
+                        
+        <label for="nota"><strong>NOTA:</strong></label>
+        <div class="star-rating">
+            <input type="radio" name="nota" value="5" id="star5" required>
+            <label for="star5">★</label>
+            
+            <input type="radio" name="nota" value="4" id="star4">
+            <label for="star4">★</label>
+            
+            <input type="radio" name="nota" value="3" id="star3">
+            <label for="star3">★</label>
+            
+            <input type="radio" name="nota" value="2" id="star2">
+            <label for="star2">★</label>
+            
+            <input type="radio" name="nota" value="1" id="star1">
+            <label for="star1">★</label>
+        </div>
+        
+        <button class="btnsalvar" type="submit">Publicar Avaliação</button>
+        
+        <div class="info-anonimo">
+            <p><small>💡 Dica: Avaliações anônimas não exigem login.</small></p>
+            {% if not session.get('logado') %}
+            <p><small>Para avaliações com seu nome, <a href="{{ url_for('login') }}">faça login</a> primeiro.</small></p>
+            {% endif %}
+        </div>
+    </form>
+</section>
+{% endblock %}
+[file content end]

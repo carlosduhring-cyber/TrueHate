@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="tabela-wrapper">
+    <table class="problemas-tabela">
+        <thead>
+            <tr>
+                <th class="col-id">ID</th>
+                <th class="col-nome">Nome</th>
+                <th class="col-email">Email</th>
+                <th class="col-telefone">Telefone</th>
+                <th class="col-problema">Problema</th>
+                <th class="col-data">Data</th>
+                <th class="col-acoes">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in problemas %}
+            <tr>
+                <td class="col-id">{{ p.id }}</td>
+                <td class="col-nome">{{ p.nome }}</td>
+                <td class="col-email">{{ p.email }}</td>
+                <td class="col-telefone">{{ p.telefone }}</td>
+                <td class="col-problema">{{ p.problema }}</td>
+                <td class="col-data">{{ p.data_envio.strftime("%d/%m/%Y %H:%M") }}</td>
+
+                <!-- BOTÃO EXCLUIR -->
+                <td class="col-acoes">
+                    <a href="{{ url_for('excluir_problema', id=p.id) }}"
+                       class="btn-excluir-problema"
+                       onclick="return confirm('Tem certeza que deseja excluir este problema?');">
+                        Excluir
+                    </a>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{%endblock%}

@@ -1,0 +1,32 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<section class="form-section">
+    <h2>Editar Usuário</h2>
+
+    <form method="POST" class="form-card">
+        <label>Nome:</label>
+        <input type="text" name="nome" value="{{ item.nome }}" required>
+
+        <label>E-mail:</label>
+        <input type="email" name="email" value="{{ item.email }}" required>
+
+        <label>Senha (deixe em branco para manter a atual):</label>
+        <input type="password" name="senha" placeholder="Nova senha...">
+
+        <label>Tipo de Usuário:</label>
+        <select name="inadmin" required>
+            <option value="0" {% if item.inadmin == 0 %}selected{% endif %}>👤 Usuário Normal</option>
+            <option value="1" {% if item.inadmin == 1 %}selected{% endif %}>👑 Administrador</option>
+            <option value="2" {% if item.inadmin == 2 %}selected{% endif %}>🏢 Empresa</option>
+        </select>
+        
+        <div class="botoes-acoes">
+            <button class="btnsalvar" type="submit">Salvar Alterações</button>
+            <a href="{{ url_for('listusuario') }}" class="btn-voltar">Cancelar</a>
+        </div>
+    </form>
+</section>
+{%endblock%}
+[file content end]

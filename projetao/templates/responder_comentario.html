@@ -1,0 +1,49 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<section class="form-section">
+    <h2>Responder ao Comentário</h2>
+
+    {% if comentario %}
+    <div class="comentario-original">
+        <h3>Você está respondendo ao comentário de: 
+            <strong>
+                {% if comentario.nome_usuario_comentou == 'Anônimo' %}
+                    Anônimo
+                {% else %}
+                    {{ comentario.nome_usuario_comentou }}
+                {% endif %}
+            </strong>
+        </h3>
+        <div class="comentario-preview">
+            <p><strong>Comentário original:</strong> {{ comentario.texto }}</p>
+            <p><strong>Avaliação:</strong> {{ comentario.avaliacao_texto }}</p>
+            <small>Comentado em: {{ comentario.data_comentario }}</small>
+        </div>
+    </div>
+    {% endif %}
+    
+    <form method="POST" class="form-card">
+        <div class="anonimo-option">
+            <input type="checkbox" id="anonimo" name="anonimo">
+            <label for="anonimo">Responder como anônimo</label>
+            <small class="help-text">Sua identidade será mantida em sigilo</small>
+        </div>
+        
+        <label for="texto">Sua Resposta:</label>
+        <textarea id="texto" name="texto" required placeholder="Digite sua resposta aqui..."></textarea>
+             
+        <button class="btnsalvar" type="submit">Publicar Resposta</button>
+        <a href="{{ url_for('listar_avaliacoes') }}" class="btn-voltar">Cancelar</a>
+        
+        <div class="info-anonimo">
+            <p><small>💡 Dica: Respostas anônimas não exigem login.</small></p>
+            {% if not session.get('logado') %}
+            <p><small>Para respostas com seu nome, <a href="{{ url_for('login') }}">faça login</a> primeiro.</small></p>
+            {% endif %}
+        </div>
+    </form>
+</section>
+{% endblock %}
+[file content end]
