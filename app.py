@@ -83,8 +83,9 @@ def login():
     if request.method == 'POST':
         usuario = request.form.get('usuario', '').strip()
         senha = request.form.get('senha', '').strip()
+        tipo = request.form.get('tipo', '').strip()
         
-        if not validar(usuario, senha):
+        if not validar(usuario, senha, tipo):
             flash('Preencha todos os campos.', 'erro')
             return render_template('login.html')
         
@@ -94,7 +95,7 @@ def login():
             return render_template('login.html')
         
         cursor = conexao.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM tb_usuario WHERE nome=%s AND senha=%s", (usuario, senha))
+        cursor.execute("SELECT * FROM tb_usuario WHERE nome=%s AND senha=%s AND inadmin=%s", (usuario, senha, tipo))
         user = cursor.fetchone()
         cursor.close()
         conexao.close()
@@ -111,7 +112,7 @@ def login():
             flash('Login realizado!', 'sucesso')
             return redirect(url_for('index'))
         
-        flash('Usuário ou senha incorretos.', 'erro')
+        flash('Usuário, senha ou tipo incorretos.', 'erro')
     
     return render_template('login.html')
 

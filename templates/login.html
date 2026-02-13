@@ -16,6 +16,14 @@
                     <label for="senha">Senha:</label>
                     <input type="password" name="senha" id="senha" required>
 
+                    <label for="tipo">Tipo da conta:</label>
+                    <select id="tipo" name="tipo" required>
+                        <option value="">Selecione...</option>
+                        <option value="0">👤 Funcionario</option>
+                        <option value="1">👤 Admnistrador</option>
+                        <option value="2">🏢 Empresa</option>
+                    </select>
+
                     <button type="submit">Entrar</button>
                     <a href="{{ url_for('usuario') }}" class="btn-voltar-login">Não possui uma conta? Faça cadastro.</a> 
                 </form>
